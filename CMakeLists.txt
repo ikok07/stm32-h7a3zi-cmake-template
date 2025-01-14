@@ -39,18 +39,20 @@ set (PROJECT_NAME             "led_toggle_cubemx")
 set (PROJECT_TYPE             "exe")
 set (LINKER_SCRIPT            "../STM32H7A3ZITX_FLASH.ld")
 set (MCPU                     "-mcpu=Cortex-M7")
-set (MFPU                 "-mfpu=fpv5-d16")
+set (MFPU                     "-mfpu=fpv5-d16")
 set (MFLOAT_ABI               "")
 set (RUNTIME_LIBRARY          "--specs=nano.specs")
 set (RUNTIME_LIBRARY_SYSCALLS "--specs=nosys.specs")
 
 
+file(GLOB_RECURSE PROJECT_SOURCES
+        ${CMAKE_SOURCE_DIR}/src/*.c
+)
+
 set (PROJECT_SOURCES
         # LIST SOURCE FILES HERE
         startup_stm32h7a3zitxq.s
-        src/main.c
-        src/syscalls.c
-        src/sysmem.c
+        ${PROJECT_SOURCES}
 )
 
 set (PROJECT_DEFINES
