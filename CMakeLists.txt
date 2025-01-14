@@ -61,8 +61,8 @@ set (PROJECT_DEFINES
 set (PROJECT_INCLUDES
         # LIST INCLUDE DIRECTORIES HERE
         include
-        "/Users/kok/Documents/STM32H7-BareMetal/chip_headers/CMSIS/Include"
-        "/Users/kok/Documents/STM32H7-BareMetal/chip_headers/CMSIS/Device/ST/STM32H7xx/Include"
+        chip_headers/CMSIS/Include
+        chip_headers/CMSIS/Device/ST/STM32H7xx/Include
 )
 
 ############ MODIFY ACCORDING TO REQUIREMENTS) ########################
