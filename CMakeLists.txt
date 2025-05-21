@@ -65,6 +65,7 @@ set (PROJECT_INCLUDES
         include
         chip_headers/CMSIS/Include
         chip_headers/CMSIS/Device/ST/STM32H7xx/Include
+        chip_headers/HAL/Include
 )
 
 ############ MODIFY ACCORDING TO REQUIREMENTS) ########################
