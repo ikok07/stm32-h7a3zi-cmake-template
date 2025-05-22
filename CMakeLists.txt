@@ -44,20 +44,28 @@ set (MFLOAT_ABI               "")
 set (RUNTIME_LIBRARY          "--specs=nano.specs")
 set (RUNTIME_LIBRARY_SYSCALLS "--specs=nosys.specs")
 
+file (GLOB_RECURSE HAL_SOURCES
+        ${CMAKE_SOURCE_DIR}/chip_headers/HAL/src/*.c
+)
 
-file(GLOB_RECURSE PROJECT_SOURCES
+set (SYSTEM_FILE "${CMAKE_SOURCE_DIR}/chip_headers/CMSIS/Device/ST/STM32H7xx/Source/system_stm32h7xx.c")
+
+file (GLOB_RECURSE FILE_SOURCES
         ${CMAKE_SOURCE_DIR}/src/*.c
 )
+
 
 set (PROJECT_SOURCES
         # LIST SOURCE FILES HERE
         startup_stm32h7a3zitxq.s
-        ${PROJECT_SOURCES}
+        ${FILE_SOURCES}
+        ${SYSTEM_FILE}
+        ${HAL_SOURCES}
 )
 
 set (PROJECT_DEFINES
         # LIST COMPILER DEFINITIONS HERE
-
+        STM32H7A3xx
 )
 
 set (PROJECT_INCLUDES

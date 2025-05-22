@@ -1,6 +1,5 @@
-#define STM32H7A3xx
-
 #include <stdio.h>
+
 #include "stm32h7xx.h"
 
 #define GPIOBEN		(1U<<1)
