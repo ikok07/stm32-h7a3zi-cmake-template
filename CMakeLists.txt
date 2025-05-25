@@ -50,15 +50,15 @@ file (GLOB_RECURSE HAL_SOURCES
 
 set (SYSTEM_FILE "${CMAKE_SOURCE_DIR}/chip_headers/CMSIS/Device/ST/STM32H7xx/Source/system_stm32h7xx.c")
 
-file (GLOB_RECURSE FILE_SOURCES
+file (GLOB_RECURSE SOURCE_FILES
         ${CMAKE_SOURCE_DIR}/src/*.c
+        ${CMAKE_SOURCE_DIR}/drivers/src/*.c
 )
-
 
 set (PROJECT_SOURCES
         # LIST SOURCE FILES HERE
         startup_stm32h7a3zitxq.s
-        ${FILE_SOURCES}
+        ${SOURCE_FILES}
         ${SYSTEM_FILE}
         ${HAL_SOURCES}
 )
@@ -74,6 +74,7 @@ set (PROJECT_INCLUDES
         chip_headers/CMSIS/Include
         chip_headers/CMSIS/Device/ST/STM32H7xx/Include
         chip_headers/HAL/Include
+        drivers/inc
 )
 
 ############ MODIFY ACCORDING TO REQUIREMENTS) ########################
