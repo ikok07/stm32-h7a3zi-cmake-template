@@ -6,8 +6,7 @@
 #define PIN14		(1U<<14)
 #define LED_PIN		PIN14
 
-int main(void)
-{
+int main(void) {
     RCC->AHB4ENR |= GPIOBEN;
 
     GPIOB->MODER |= (1U<<28);
