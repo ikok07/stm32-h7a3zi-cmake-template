@@ -23,7 +23,7 @@ int main(void) {
         .pGPIOx = GPIOC,
         .GPIO_PinConfig = {
             .GPIO_PinNumber = BTN_PIN,
-            .GPIO_PinMode = GPIO_MODE_INPUT,
+            .GPIO_PinMode = GPIO_MODE_INPUT_R_EDGE,
             .GPIO_PinSpeed = GPIO_SPEED_LOW,
             .GPIO_PinPuPdControl = GPIO_PD
         }
@@ -34,12 +34,12 @@ int main(void) {
     GPIO_Init(&ledGPIOHandle);
     GPIO_Init(&buttonGPIOHandle);
 
-    while (1) {
-        GPIO_WriteToOutputPin(
-            GPIOB,
-            LED_PIN,
-            GPIO_ReadFromInputPin(GPIOC, BTN_PIN) ? ENABLE : DISABLE
-            );
-        for (int i = 0; i < 1000; i++);
-    }
+    GPIO_IRQConfig(BTN_PIN, 1, ENABLE);
+
+    while (1);
+}
+
+void EXTI15_10_IRQHandler(void) {
+    GPIO_IRQHandling(BTN_PIN);
+    GPIO_ToggleOutputPin(GPIOB, LED_PIN);
 }

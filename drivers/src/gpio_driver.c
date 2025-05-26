@@ -46,12 +46,30 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle) {
     uint32_t temp = 0;
 
     // GPIO Mode Configuration
+    pGPIOHandle->pGPIOx->MODER &=~ (0b11 << (2 * pinNumber)); // Clear the mode bits
     if (pGPIOHandle->GPIO_PinConfig.GPIO_PinMode <= GPIO_MODE_ANALOG) {
         temp = pGPIOHandle->GPIO_PinConfig.GPIO_PinMode << (2 * pinNumber);
-        pGPIOHandle->pGPIOx->MODER &=~ (0b11 << (2 * pinNumber));
         pGPIOHandle->pGPIOx->MODER |= temp;
     } else {
-        // Todo...
+        // Configure rising / falling edge
+        if (pGPIOHandle->GPIO_PinConfig.GPIO_PinMode == GPIO_MODE_INPUT_R_EDGE) {
+            EXTI->FTSR1 &=~ 1 << pinNumber;
+            EXTI->RTSR1 |= 1 << pinNumber;
+        } else if (pGPIOHandle->GPIO_PinConfig.GPIO_PinMode == GPIO_MODE_INPUT_F_EDGE) {
+            EXTI->RTSR1 &=~ 1 << pinNumber;
+            EXTI->FTSR1 |= 1 << pinNumber;
+        } else if (pGPIOHandle->GPIO_PinConfig.GPIO_PinMode == GPIO_MODE_INPUT_RF_EDGE) {
+            EXTI->RTSR1 |= 1 << pinNumber;
+            EXTI->FTSR1 |= 1 << pinNumber;
+        }
+
+        // Enable the EXTI Line for the desired GPIO Pin
+        RCC->APB4ENR |= 1 << RCC_APB4ENR_SYSCFGEN_Pos;
+        SYSCFG->EXTICR[pinNumber / 4] &=~ (0xF << (4 * (pinNumber % 4)));
+        SYSCFG->EXTICR[pinNumber / 4] = GPIO_BASEADDR_TO_CODE(pGPIOHandle->pGPIOx) << (4 * (pinNumber % 4));
+
+        // Enable interrupt delivery by unmasking the input
+        EXTI->IMR1 |= 1 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber;
     }
 
     // GPIO Speed Configuration
@@ -135,6 +153,41 @@ void GPIO_WriteToOutputPort(GPIO_TypeDef *pGPIOx, uint32_t Value) {
     pGPIOx->ODR = Value;
 }
 
+/**
+ * @brief Toggles the state of a GPIO Pin
+ * @param pGPIOx GPIO Port
+ * @param PinNumber GPIO Pin
+ */
 void GPIO_ToggleOutputPin(GPIO_TypeDef *pGPIOx, uint8_t PinNumber) {
     pGPIOx->ODR ^= (1 << PinNumber);
+}
+
+/**
+ * @brief Configures the GPIO for interrupt handling
+ * @param IRQNumber IRQ Number
+ * @param IRQPriority IRQ Priority (0 - 15)
+ * @param Enabled If the IRQ is enabled
+ */
+void GPIO_IRQConfig(uint8_t PinNumber, uint8_t IRQPriority, uint8_t Enabled) {
+
+    uint8_t IRQNumber = GPIO_PIN_TO_IRQ_NUMBER(PinNumber);
+
+    if (Enabled) {
+        // Enable interrupt
+        NVIC_EnableIRQ(IRQNumber);
+        // Set priority
+        NVIC_SetPriority(IRQNumber, IRQPriority);
+    } else {
+        NVIC_DisableIRQ(IRQNumber);
+    }
+}
+
+/**
+ * @brief Clears the EXTI Pending Register for the specified GPIO
+ * @param PinNumber GPIO Pin
+ */
+void GPIO_IRQHandling(uint8_t PinNumber) {
+    if (EXTI->PR1 & (1 << PinNumber)) {
+        EXTI->PR1 |= (1 << PinNumber);
+    }
 }

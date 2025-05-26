@@ -27,6 +27,34 @@
 #define GPIO_REG_RESET(offset)      do { (RCC->AHB4RSTR |= (1U << offset)); (RCC->AHB4RSTR &=~ (1U << offset)); } while (0)
 
 /**
+ * @brief Converts a GPIO Base Address to a code to be used in the SYSCFG_EXTICRx register
+ * @param address GPIO Base Address
+ */
+#define GPIO_BASEADDR_TO_CODE(address) ((address == GPIOA) ? 0 :\
+                                       (address == GPIOB) ? 1 :\
+                                       (address == GPIOC) ? 2 :\
+                                       (address == GPIOD) ? 3 :\
+                                       (address == GPIOE) ? 4 :\
+                                       (address == GPIOF) ? 5 :\
+                                       (address == GPIOG) ? 6 :\
+                                       (address == GPIOH) ? 7 :\
+                                       (address == GPIOI) ? 8 :\
+                                       (address == GPIOJ) ? 9 :\
+                                       (address == GPIOK) ? 10 : 0)
+
+/**
+ * @brief Gets the corresponding IRQ Number for the provided GPIO Pin
+ * @param pin GPIO Pin
+ */
+#define GPIO_PIN_TO_IRQ_NUMBER(pin) ((pin == 0) ? EXTI0_IRQn :\
+                                     (pin == 1) ? EXTI1_IRQn :\
+                                     (pin == 2) ? EXTI2_IRQn :\
+                                     (pin == 3) ? EXTI3_IRQn :\
+                                     (pin == 4) ? EXTI4_IRQn :\
+                                     (pin >= 5 && pin <= 9) ? EXTI9_5_IRQn :\
+                                     (pin >= 10 && pin <= 15) ? EXTI15_10_IRQn : EXTI0_IRQn)
+
+/**
  * @GPIO_PINS
  */
 #define GPIO_PIN_NO_0               0
@@ -113,10 +141,9 @@ void GPIO_WriteToOutputPort(GPIO_TypeDef *pGPIOx, uint32_t Value);
 void GPIO_ToggleOutputPin(GPIO_TypeDef *pGPIOx, uint8_t PinNumber);
 
 /*
- * TODO
  * IRQ Configuration
  */
-void GPIO_IRQConfig(uint8_t IRQNumber, uint8_t IRQPriority, uint8_t Enabled);
+void GPIO_IRQConfig(uint8_t PinNumber, uint8_t IRQPriority, uint8_t Enabled);
 void GPIO_IRQHandling(uint8_t PinNumber);
 
 #endif //GPIO_DRIVER_H
