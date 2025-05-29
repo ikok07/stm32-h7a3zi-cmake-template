@@ -7,7 +7,6 @@
 #define BTN_PIN		GPIO_PIN_NO_13
 
 int main(void) {
-
     GPIO_Handle_t ledGPIOHandle = {
         .pGPIOx = GPIOB,
         .GPIO_PinConfig = {
@@ -33,7 +32,6 @@ int main(void) {
     GPIO_PeriClockControl(GPIOC, ENABLE);
     GPIO_Init(&ledGPIOHandle);
     GPIO_Init(&buttonGPIOHandle);
-
     GPIO_IRQConfig(BTN_PIN, 1, ENABLE);
 
     while (1);

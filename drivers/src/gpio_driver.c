@@ -169,7 +169,6 @@ void GPIO_ToggleOutputPin(GPIO_TypeDef *pGPIOx, uint8_t PinNumber) {
  * @param Enabled If the IRQ is enabled
  */
 void GPIO_IRQConfig(uint8_t PinNumber, uint8_t IRQPriority, uint8_t Enabled) {
-
     uint8_t IRQNumber = GPIO_PIN_TO_IRQ_NUMBER(PinNumber);
 
     if (Enabled) {
