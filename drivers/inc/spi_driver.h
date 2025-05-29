@@ -51,11 +51,60 @@
                                                 (void)0;\
                                              } while (0)
 
+/**
+ * @SPI_MODES
+ */
+#define SPI_DEVICE_MODE_MASTER              1
+#define SPI_DEVICE_MODE_SLAVE               0
+
+/**
+ * @SPI_BUS_CONFIGURATIONS
+ */
+#define SPI_BUS_CFG_FULL_DUPLEX             1
+#define SPI_BUS_CFG_HALF_DUPLEX             2
+#define SPI_BUS_CFG_SIMPLEX_RXONLY          3
+
+/**
+ * @SPI_SPEEDs
+ */
+#define SPI_SCLK_SPEED_DIV2                 0
+#define SPI_SCLK_SPEED_DIV4                 1
+#define SPI_SCLK_SPEED_DIV8                 2
+#define SPI_SCLK_SPEED_DIV16                3
+#define SPI_SCLK_SPEED_DIV32                4
+#define SPI_SCLK_SPEED_DIV64                5
+#define SPI_SCLK_SPEED_DIV128               6
+#define SPI_SCLK_SPEED_DIV256               7
+
+/**
+ * @SPI_DATA_FRAMES
+ */
+#define SPI_DF_8BITS                       7
+#define SPI_DF_16BITS                      15
+
+/**
+ * @CLOCK_POLARITIES
+ */
+#define SPI_CPOL_HIGH                       1
+#define SPI_CPOL_LOW                        0
+
+/**
+ * @CLOCK_PHASE
+ */
+#define SPI_CPHA_HIGH                       1
+#define SPI_CPHA_LOW                        0
+
+/**
+ * @SPI_SLAVE_SELECT_MANAGEMENT
+ */
+#define SPI_SSM_HW                          1
+#define SPI_SSM_SW                          0
+
 typedef struct {
     uint8_t SPI_DeviceMode;
     uint8_t SPI_BusConfig;
     uint8_t SPI_SclkSpeed;
-    uint8_t SPI_DFF;
+    uint8_t SPI_DF;
     uint8_t SPI_CPOL;
     uint8_t SPI_CPHA;
     uint8_t SPI_SSM;
