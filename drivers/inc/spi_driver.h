@@ -60,9 +60,9 @@
 /**
  * @SPI_BUS_CONFIGURATIONS
  */
-#define SPI_BUS_CFG_FULL_DUPLEX             1
-#define SPI_BUS_CFG_HALF_DUPLEX             2
-#define SPI_BUS_CFG_SIMPLEX_RXONLY          3
+#define SPI_BUS_CFG_FULL_DUPLEX             0
+#define SPI_BUS_CFG_SIMPLEX_RXONLY          2
+#define SPI_BUS_CFG_HALF_DUPLEX             3
 
 /**
  * @SPI_SPEEDs
@@ -97,17 +97,31 @@
 /**
  * @SPI_SLAVE_SELECT_MANAGEMENT
  */
-#define SPI_SSM_HW                          1
-#define SPI_SSM_SW                          0
+#define SPI_SSM_HW                          0
+#define SPI_SSM_SW                          1
+
+/**
+ * @SPI_SSOE
+ */
+#define SPI_SS_OUTPUT_DISABLED              0
+#define SPI_SS_OUTPUT_ENABLED               1
+
+/**
+ * @SPI_SS_ACTIVE_LEVEL
+ */
+#define SPI_SS_LOW                          0
+#define SPI_SS_HIGH                         1
 
 typedef struct {
-    uint8_t SPI_DeviceMode;
-    uint8_t SPI_BusConfig;
-    uint8_t SPI_SclkSpeed;
-    uint8_t SPI_DF;
-    uint8_t SPI_CPOL;
-    uint8_t SPI_CPHA;
-    uint8_t SPI_SSM;
+    uint8_t SPI_DeviceMode;                 /** Possible values from @SPI_MODES */
+    uint8_t SPI_BusConfig;                  /** Possible values from @SPI_BUS_CONFIGURATIONS */
+    uint8_t SPI_SclkSpeed;                  /** Possible values from @SPI_SPEEDs */
+    uint8_t SPI_DF;                         /** Possible values from @SPI_DATA_FRAMES */
+    uint8_t SPI_CPOL;                       /** Possible values from @CLOCK_POLARITIES */
+    uint8_t SPI_CPHA;                       /** Possible values from @CLOCK_PHASE */
+    uint8_t SPI_SSM;                        /** Possible values from @SPI_SLAVE_SELECT_MANAGEMENT */
+    uint8_t SPI_SS_OutputEnabled;           /** Possible values from @SPI_SSOE */
+    uint8_t SPI_SS_ActiveLevel;             /** Possible values from @SPI_SS_ACTIVE_LEVEL */
 } SPI_Config_t;
 
 typedef struct {
@@ -129,13 +143,18 @@ void SPI_DeInit(SPI_TypeDef *pSPIx);
 /*
  * Data send and receive
  */
-void SPI_SendData(SPI_TypeDef *pSPIx, uint8_t *pTXBuffer, uint32_t len);
-void SPI_ReceiveData(SPI_TypeDef *pSPIx, uint8_t *pRXBuffer, uint32_t len);
+int SPI_SendData(SPI_Handle_t *pSPIHandle, uint8_t *pTXBuffer, uint32_t len);
+void SPI_ReceiveData(SPI_Handle_t *pSPIHandle, uint8_t *pRXBuffer, uint32_t len);
 
 /*
  * IRQ Configuration
  */
 void SPI_IRQConfig(uint8_t PinNumber, uint8_t IRQPriority, uint8_t Enabled);
 void SPI_IRQHandling(uint8_t PinNumber);
+
+/*
+ * Other controls
+ */
+void SPI_PeripheralControl(SPI_TypeDef *pSPIx, uint8_t enabled);
 
 #endif //SPI_DRIVER_H
